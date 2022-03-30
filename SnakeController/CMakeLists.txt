@@ -37,3 +37,9 @@ if (BUILD_COVERAGE_UNIT_TESTS)
     target_link_libraries(${UT_DRIVER} ${CMAKE_CXX_COVERAGE_LIBRARY})
     setup_target_for_coverage(${UT_DRIVER}_COV ${UT_DRIVER} ${COVERAGE_REPORT_LOCATION})
 endif()
+
+add_custom_target(run_tests
+                  COMMAND ${UT_DRIVER}
+                  DEPENDS ${UT_DRIVER})
+
+add_test(tests ${UT_DRIVER})
