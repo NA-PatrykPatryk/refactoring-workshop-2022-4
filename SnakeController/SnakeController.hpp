@@ -7,6 +7,7 @@
 
 #include "IEventHandler.hpp"
 #include "SnakeInterface.hpp"
+#include "SnakeSegments.hpp"
 
 class Event;
 class IPort;
