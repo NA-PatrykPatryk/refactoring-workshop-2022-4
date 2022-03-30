@@ -42,7 +42,7 @@ private:
     std::pair<int, int> m_mapDimension;
     std::pair<int, int> m_foodPosition;
 
-    std::list<SnakeSegments::Segment> m_segments;
+    std::list<SnakeSegments::Segment> m_segments; //
     Direction m_currentDirection;
 
     void handleTimeoutInd();
@@ -51,12 +51,12 @@ private:
     void handleFoodResp(std::unique_ptr<Event>);
     void handlePauseInd(std::unique_ptr<Event>);
 
-    bool isSegmentAtPosition(int x, int y) const;
-    SnakeSegments::Segment calculateNewHead() const;
+    bool isSegmentAtPosition(int x, int y) const; //
+    SnakeSegments::Segment calculateNewHead() const; 
     void updateSegmentsIfSuccessfullMove(SnakeSegments::Segment const& newHead);
     void addHeadSegment(SnakeSegments::Segment const& newHead);
     void removeTailSegmentIfNotScored(SnakeSegments::Segment const& newHead);
-    void removeTailSegment();
+    void removeTailSegment(); //
 
     bool isPositionOutsideMap(int x, int y) const;
 
@@ -64,6 +64,7 @@ private:
     void sendClearOldFood();
     void sendPlaceNewFood(int x, int y);
 
+    SnakeSegments m_snakeSegments;
     bool m_paused;
 };
 

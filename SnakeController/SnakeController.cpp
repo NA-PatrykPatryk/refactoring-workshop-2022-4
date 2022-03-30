@@ -20,7 +20,8 @@ Controller::Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePo
     : m_displayPort(p_displayPort),
       m_foodPort(p_foodPort),
       m_scorePort(p_scorePort),
-      m_paused(false)
+      m_paused(false),
+      m_snakeSegments(m_segments)
 {
     std::istringstream istr(p_config);
     char w, f, s, d;
@@ -130,7 +131,7 @@ SnakeSegments::Segment Controller::calculateNewHead() const
     return newHead;
 }
 
-void Controller::removeTailSegment()
+void Controller::removeTailSegment() //
 {
     auto tail = m_segments.back();
 
