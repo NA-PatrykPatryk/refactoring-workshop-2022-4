@@ -51,7 +51,6 @@ private:
     void handleFoodResp(std::unique_ptr<Event>);
     void handlePauseInd(std::unique_ptr<Event>);
 
-    bool isSegmentAtPosition(int x, int y) const; //
     SnakeSegments::Segment calculateNewHead() const; 
     void updateSegmentsIfSuccessfullMove(SnakeSegments::Segment const& newHead);
     void addHeadSegment(SnakeSegments::Segment const& newHead);
