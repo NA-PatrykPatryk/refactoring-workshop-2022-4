@@ -21,7 +21,7 @@ Controller::Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePo
       m_foodPort(p_foodPort),
       m_scorePort(p_scorePort),
       m_paused(false),
-      m_snakeSegments(m_segments)
+      m_snakeSegments(m_segments, m_currentDirection)
 {
     std::istringstream istr(p_config);
     char w, f, s, d;
@@ -90,40 +90,7 @@ void Controller::sendClearOldFood()
     m_displayPort.send(std::make_unique<EventT<DisplayInd>>(clearOldFood));
 }
 
-namespace
-{
-bool isHorizontal(Direction direction)
-{
-    return Direction_LEFT == direction or Direction_RIGHT == direction;
-}
-
-bool isVertical(Direction direction)
-{
-    return Direction_UP == direction or Direction_DOWN == direction;
-}
-
-bool isPositive(Direction direction)
-{
-    return (isVertical(direction) and Direction_DOWN == direction)
-        or (isHorizontal(direction) and Direction_RIGHT == direction);
-}
-
-bool perpendicular(Direction dir1, Direction dir2)
-{
-    return isHorizontal(dir1) == isVertical(dir2);
-}
-} // namespace
-
-SnakeSegments::Segment Controller::calculateNewHead() const
-{
-    SnakeSegments::Segment const& currentHead = m_segments.front();
-
-    SnakeSegments::Segment newHead;
-    newHead.x = currentHead.x + (isHorizontal(m_currentDirection) ? isPositive(m_currentDirection) ? 1 : -1 : 0);
-    newHead.y = currentHead.y + (isVertical(m_currentDirection) ? isPositive(m_currentDirection) ? 1 : -1 : 0);
-
-    return newHead;
-}
+ // namespace
 
 void Controller::removeTailSegment() //
 {
@@ -172,12 +139,13 @@ void Controller::updateSegmentsIfSuccessfullMove(SnakeSegments::Segment const& n
 
 void Controller::handleTimeoutInd()
 {
-    updateSegmentsIfSuccessfullMove(calculateNewHead());
+    updateSegmentsIfSuccessfullMove(m_snakeSegments.calculateNewHead());
 }
 
 void Controller::handleDirectionInd(std::unique_ptr<Event> e)
 {
     auto direction = payload<DirectionInd>(*e).direction;
+    bool perpend;
 
     if (perpendicular(m_currentDirection, direction)) {
         m_currentDirection = direction;
